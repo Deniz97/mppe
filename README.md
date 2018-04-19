@@ -5,4 +5,4 @@ numpy
 opencv-python
 pytorch
 torchvision
-keras with TF backend
+keras TF backend
