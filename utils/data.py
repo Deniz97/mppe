@@ -10,13 +10,14 @@ else:
 
 class DataIteratorBase:
 
-    def __init__(self, batch_size = 10, num_out=4, segmentation=True):
+    def __init__(self, batch_size = 10, num_out=4, segmentation=True, visualize=False):
 
         self.batch_size = batch_size
         self.heat_num = 18
         self.num_out = num_out
         self.keypoints = [None]*self.batch_size #this is not passed to NN, will be accessed by accuracy calculation
         self.segmentation = segmentation
+        self.visualize = visualize
 
     def gen_raw(self): # this function used for test purposes in py_rmpe_server
 
@@ -53,7 +54,8 @@ class DataIteratorBase:
             # label[order]
 
             dta_img = np.transpose(data_img, (1, 2, 0))[:,:,::-1]
-            dta_img = self.preprocess_input(dta_img)
+            if not self.visualize:
+                dta_img = self.preprocess_input(dta_img)
             label = np.transpose(label, (1, 2, 0))
             mask_miss = np.repeat(mask_img[:, :, np.newaxis], self.heat_num, axis=-1)
 
@@ -93,9 +95,9 @@ class DataIteratorBase:
 class DataIterator(DataIteratorBase):
 
     def __init__(self, file, config, shuffle=True, augment=True, batch_size=10, num_out=4, limit=None,
-                 segmentation=True):
+                 segmentation=True, visualize=False):
 
-        super(DataIterator, self).__init__(batch_size, num_out, segmentation)
+        super(DataIterator, self).__init__(batch_size, num_out, segmentation, visualize)
 
         self.limit = limit
         self.records = 0

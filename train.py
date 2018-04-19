@@ -2,7 +2,6 @@ from __future__ import print_function
 import os
 import argparse
 import keras
-
 from server.py_rmpe_config import RmpeCocoConfig
 from utils.data import DataIterator
 
