@@ -30,9 +30,9 @@ class CocoPoseDataset(Dataset):
         image[:, :, 2] -= 123.68
         return image
     def __getitem__(self,idx):
-        print("get item gets called")
+        
         foo = self.raw_generator(idx)
-        print("got foo from raw generator")
+        
         if len(foo)==5:
             data_img, mask_img, mask_all, label, kpts = foo
         else:
