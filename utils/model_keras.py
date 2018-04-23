@@ -747,6 +747,7 @@ def build_hg():
 
 
     model = Model(inputs=inputs, outputs=x)
+    print('done')
 
     return model
 
