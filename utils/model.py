@@ -4,6 +4,10 @@ import torchvision
 
 from torch.autograd import Variable
 
+# We can handle FPN and post-steps in different classes for further usability of FPN.
+# FPN paper: https://arxiv.org/abs/1612.03144
+# A new idea: https://arxiv.org/pdf/1803.01534.pdf
+
 class FPN(torch.nn.Module):
     def __init__(self):
         """
@@ -28,8 +32,18 @@ class FPN(torch.nn.Module):
 
         return c2, c3, c4, c5
 
+class Model(torch.nn.Module):
+    def __init__(self):
+        super(Model, self).__init__()
+        self.FPN = FPN()
+
+    def forward(self, x):
+        features = FPN(x)
+
+        return features
+
 def build():
-    model = FPN()
+    model = Model()
     model.cuda()
     return model
 
