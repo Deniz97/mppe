@@ -43,19 +43,21 @@ class CocoPoseDataset(Dataset):
         #data_img = np.transpose(data_img, (1, 2, 0))[:,:,::-1]
         if not self.visualize:
             data_img = self.preprocess_input(data_img)
-        label = np.transpose(label, (1, 2, 0))
-        mask_miss = np.repeat(mask_img[:, :, np.newaxis], self.heat_num, axis=-1)
-
+        #label = np.transpose(label, (1, 2, 0))
+        mask_miss = np.repeat(mask_img[np.newaxis,:, :], self.heat_num, axis=0)
+        print(mask_miss.shape)
+        print(label.shape)
+        print(mask_all.shape)
         if self.segmentation:
-            label = np.dstack((label, np.expand_dims(mask_all, axis=-1)))
-            mask_miss = np.dstack((mask_miss, np.ones((mask_miss.shape[0], mask_miss.shape[1], 1))))
+            label = np.vstack((label, np.expand_dims(mask_all, axis=0)))
+            mask_miss = np.vstack((mask_miss, np.ones((1,mask_miss.shape[1], mask_miss.shape[2]))))
         
         self.keypoints = kpts #TODO
         
         data_img = torch.from_numpy(data_img)
         label = torch.from_numpy(label)
         mask_miss = torch.from_numpy(mask_miss)
-        
+        print(label.shape)
         if self.transform:
             pass
             #sample = self.transform(sample)
